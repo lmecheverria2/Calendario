@@ -1,8 +1,15 @@
+name: Build and Analyze
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   build:
     name: Build and analyze
     runs-on: windows-latest
-    
+
     services:
       sonarqube:
         image: sonarqube:latest
@@ -12,11 +19,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      # Configura el SonarQube scanner
       - name: Set up SonarQube Scanner
         uses: SonarSource/sonarqube-scan-action@v4
         with:
           sonar-version: 6.2.1.4610
+
+      # Ejecutar el análisis
       - name: Run SonarQube scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: http://localhost:9000  # Asegúrate de que esté configurado a localhost si usas contenedor
+          SONAR_HOST_URL: http://localhost:9000  # Solo si usas un contenedor, de lo contrario, reemplaza con tu URL
