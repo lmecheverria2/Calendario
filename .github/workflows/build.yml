@@ -16,8 +16,13 @@ jobs:
       - name: Listar archivos para depuración
         run: Get-ChildItem -Recurse
 
-      - name: Dar permisos al script
-        run: powershell -Command "chmod +x .\scripts\install-sonar-scanner-cli.sh"
+      - name: Verificar si el archivo de script existe
+        run: |
+          if (Test-Path -Path ".\scripts\install-sonar-scanner-cli.sh") {
+            Write-Host "El archivo está presente."
+          } else {
+            Write-Host "El archivo no se encuentra."
+          }
 
       - name: Instalar Sonar Scanner CLI
         run: .\scripts\install-sonar-scanner-cli.sh
