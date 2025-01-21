@@ -13,22 +13,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Listar archivos para depuración
+        run: dir /s
+
       - name: Dar permisos al script
-        run: chmod +x ${GITHUB_ACTION_PATH}/scripts/install-sonar-scanner-cli.sh
-        shell: bash
+        run: powershell -Command "chmod +x .\scripts\install-sonar-scanner-cli.sh"
 
       - name: Instalar Sonar Scanner CLI
-        run: ${GITHUB_ACTION_PATH}/scripts/install-sonar-scanner-cli.sh
-        shell: bash
+        run: .\scripts\install-sonar-scanner-cli.sh
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
           INPUT_SCANNERVERSION: 6.2.1.4610
           INPUT_SCANNERBINARIESURL: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli
-
-      - name: Ejecutar Sonar Scanner
-        run: sonar-scanner
-        shell: bash
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
