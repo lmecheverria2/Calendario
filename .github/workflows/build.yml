@@ -20,6 +20,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Espera a que el servicio SonarQube esté disponible
+      - name: Wait for SonarQube to be ready
+        run: |
+          for i in {1..30}; do
+            if curl --silent --fail http://localhost:9000/api/system/health; then
+              echo "SonarQube is up and running!";
+              break;
+            fi;
+            echo "Waiting for SonarQube...";
+            sleep 10;
+          done
+
       # Configura el SonarQube scanner
       - name: Set up SonarQube Scanner
         uses: SonarSource/sonarqube-scan-action@v4
