@@ -9,9 +9,6 @@ jobs:
   sonarqube:
     runs-on: windows-latest
 
-    env:
-      SONAR_HOST_URL: http://127.0.0.1:9000  # Define tu URL de SonarQube aquí
-
     steps:
     - name: Check out code
       uses: actions/checkout@v2
@@ -19,9 +16,11 @@ jobs:
     - name: Set up SonarQube scanner
       uses: SonarSource/sonarqube-scan-action@v4
       with:
-        sonar.projectKey: TestingGithubSonarQube
-        sonar.sources: .
-        sonar.host.url: ${{ env.SONAR_HOST_URL }}  # Aquí pasas la URL correctamente
+        args: |
+          -Dsonar.projectKey=TestingGithubSonarQube
+          -Dsonar.sources=.
+          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
     - name: Run SonarQube Scan
       run: |
